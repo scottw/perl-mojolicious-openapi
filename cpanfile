@@ -1,0 +1,9 @@
+requires 'Moo';
+requires 'Types::Standard';
+requires 'strictures';
+requires 'JSON';
+requires 'Cpanel::JSON::XS';
+requires 'namespace::clean';
+requires 'Mojolicious';
+requires 'Mojolicious::Plugin::OpenAPI';
+requires 'YAML::XS';

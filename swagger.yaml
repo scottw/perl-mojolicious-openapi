@@ -1,0 +1,53 @@
+swagger: '2.0'
+
+info:
+  title: Time Tracker
+  version: '1.0.0'
+
+basePath: /v1
+
+paths:
+  /timers/summary:
+    get:
+      x-mojo-to: 'timers#summary'
+      responses:
+        '200':
+          description: Retrieve all timers
+          schema:
+            type: object
+            properties:
+              timers:
+                type: array
+                items:
+                  $ref: '#/definitions/Timer'
+  /timers:
+    post:
+      x-mojo-to: 'timers#append'
+      parameters:
+        - name: timer
+          in: body
+          description: A new timer
+          required: true
+          schema:
+            $ref: '#/definitions/Timer'
+      responses:
+        '201':
+          description: Successful timer creation
+          schema:
+            type: object
+
+definitions:
+  Timer:
+    type: object
+    required:
+      - start
+      - activity
+    properties:
+      start:
+        type: integer
+      stop:
+        type: integer
+      duration:
+        type: integer
+      activity:
+        type: string

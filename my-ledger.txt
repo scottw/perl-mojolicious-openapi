@@ -1,0 +1,5 @@
+{"start":1500,"activity":"working","stop":2000}
+{"activity":"working","stop":3000,"start":2500}
+{"activity":"working","stop":3700,"start":3500}
+{"stop":4000,"activity":"meeting","start":3700}
+{"start":4000,"activity":"nap","stop":4500}
