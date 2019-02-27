@@ -1,5 +1,6 @@
 package Time::Tracker;
 use Mojo::Base 'Mojolicious';
+use Class::Load 'load_class';
 use Tracker;
 
 sub startup {
@@ -7,10 +8,7 @@ sub startup {
 
     $self->plugin('Config');
 
-    my $ledger_class = $self->config->{'ledger_class'};
-    eval "require $ledger_class";
-    die "Unable to load ledger class '$ledger_class': $@\n" if $@;
-
+    my $ledger_class = load_class $self->config->{'ledger_class'};
     my $ledger_args = $self->app->config->{'ledger_args'} // {};
 
     my $tracker;
