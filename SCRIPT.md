@@ -1,5 +1,21 @@
 # Introduction to OpenAPI 2.0 (Swagger) and Mojolicious::Plugin::OpenAPI
 
+(Setup:
+
+```sh
+rsync -avHS --exclude .git --exclude local ./ ~/demo/
+cd ~/demo
+rm -r lib/Time
+rm -r t/app-tracker.t
+rm *.md
+cat /dev/null > my-ledger.txt
+rm time-tracker.conf
+carton install
+```
+)
+
+## Part 1: Creating an OpenAPI Specification
+
 Some people like to edit their Swagger document in an online editor:
 
 (visit https://editor.swagger.io and import `swagger.yaml`)
@@ -12,19 +28,25 @@ Now we have a syntactically correct OpenAPI v2 document. Doing this kind of desi
 - you get beautiful documentation that managers just adore. It's also a nice reference for developers
 - you gain empathy for the client—I can't tell you how many times I've written an API and then realized I had gotten the design all wrong later when I tried to use my API to do something useful. It's so easy to guess wrong about how the API will be used. Good API design doesn't just happen.
 
-Ok, we're done with part 1. Part 2 is connecting this with our model.
+Ok, we're done with part 1—we've designed and created our Swagger API. Part 2 is connecting this with our model.
+
+## Part 2: Integration with an OpenAPI Specification
 
 Again, we're going to copy-paste most of this for the sake of time.
 
 First I'm going to copy in the Mojolicious script. This is typically generated for you by `mojo generate app`. We'll also copy in the two mojolicious files and the test file.
 
-(copy the files from *this* repo)
+(copy the files from *this* repo:
+
+```sh
+rsync -avHS ~/Sync/Github/perl-mojolicious-openapi/script/ script/
+rsync -avHS ~/Sync/Github/perl-mojolicious-openapi/lib/ lib/
+cp -p ~/Sync/Github/perl-mojolicious-openapi/t/app-tracker.t t/
+cp -p ~/Sync/Github/perl-mojolicious-openapi/time-tracker.conf .
+```
+)
 
 We'll look at these now. The entry point for all Mojolicious apps is the script file, but there's no user serviceable parts inside. As I mentioned, this script is created for you when you run `mojo generate app`.
-
-(open `script/time_tracker`)
-
-This is loading Mojolicious::Commands, which is the CLI interface for Mojolicious, and then runs `start_app` which when we give it `daemon` as an argument, starts a server listening on port 3000. `start_app` finally loads and compiles our application, whose root is here in the `lib` directory.
 
 (open lib/Time/Tracker.pm)
 
@@ -42,7 +64,7 @@ You can see that it's just a Perl hash reference. We can put whatever is conveni
 
 (back to `lib/Time/Tracker.pm`)
 
-I'm just doing a little Poor Man's dependency injection here, but this is really one of the advantages of using a dynamic language like Perl, so why not take advantage of that? We are loading the appropriate storage class for our ledger.
+I want to load the appropriate storage class for our time tracker now. Here I'm just doing a little dependency injection; this is really one of the advantages of using a dynamic language like Perl. In statically typed languages this would be a lot more complex.
 
 Next we pull out any arguments for that ledger class from the config.
 
